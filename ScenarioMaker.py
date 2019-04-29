@@ -14,7 +14,7 @@ class ScenarioMaker:
         self.home_path =self. m_frw_tester.abspath
         self.logs_path = os.environ["HOME"] + "/Logs"  # create a directory for personal logs
         self.checkdir(self.logs_path)  # chek if the Logs directory or not if not create it else nothing will be done
-        self.cleandir(self.logs_path)
+        self.cleandir(self.logs_path)  # delete all directories +files in the params path
 
 
     def checkdir(self,arg_path):
@@ -38,6 +38,7 @@ class ScenarioMaker:
 
     def copy_files(self,from_path, to_path):
         if os.path.exists(to_path):
+            #self.cleandir(to_path)
             shutil.rmtree(to_path)
         shutil.copytree(from_path, to_path)
 
@@ -78,7 +79,7 @@ class ScenarioMaker:
         self.m_logger.write(loc_path + "/rtos_"+test_mode+"video_log.txt", linux_rtos_logs[1])
         self.copy_files(self.home_path+"/Desktop/test_capt",loc_path+"/test_capt")
         self.cleandir(self.home_path + "/Desktop/test_capt")
-        time.sleep(1)
+        time.sleep(1.5)
 
 
 
@@ -94,15 +95,19 @@ class ScenarioMaker:
         self.m_logger.write(loc_path+"/linux_ImageTest_log.txt",linux_rtos_logs[0])
         self.m_logger.write(loc_path+"/rtos_ImageTest_log.txt",linux_rtos_logs[1])
         self.copy_files(self.home_path + "/Desktop/test_capt", loc_path + "/test_capt")
+        self.cleandir(self.home_path + "/Desktop/test_capt") #for each test delete the  generated files
+        time.sleep(1.5)
+
+    def cleanup(self):
+        self.m_frw_tester.Rinit_camera()
         self.cleandir(self.home_path + "/Desktop/test_capt")
         time.sleep(1)
-
-    def cleanupCam(self):
-        self.m_frw_tester.Rinit_camera()
         clean_cmd = self.m_frw_tester.tcmdAgent.getCmd(clean=1) # delete all files in DCIM/100GOPRO
         self.m_frw_tester.Execute(clean_cmd)
+        time.sleep(0.5)
 
 
 
-
-
+#
+# s= ScenarioMaker()
+# s.cleandir(s.logs_path+"/still_5K_EAC_30_W_HEVC_IMX577None")

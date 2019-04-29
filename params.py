@@ -134,15 +134,19 @@ def get_tear_down_command_table():
                                "ssh root@"+param_dict['CAM_IP']+" ls -l /tmp/fuse_d/DCIM/100GOPRO/",
                                "./tear_down.sh",
                                "ssh root@" + param_dict['CAM_IP'] + " rm -rf /tmp/fuse_d/DCIM/100GOPRO/*"
-                               #
-                               # "files=$(ssh root@"+param_dict['CAM_IP']+" ls /tmp/fuse_d/DCIM/100GOPRO/)",
-                               # "for file in $files ;  do wget  "+param_dict['CAM_IP']+":8042/DCIM/100GOPRO/$file -O "+param_dict['TARGET_DIR']+"/$file ;done",
-                               # #"ssh root@"+param_dict['CAM_IP']+" rm -rf /tmp/fuse_d/DCIM/100GOPRO/*"
-                               # "./tear_down.sh -ping",
-                               # "tcmd t dbg off",
-                               # "./tear_down.sh -getresult",
                              ]
     return tear_down_command_table
 
-
+# def get_tear_down_command_table():
+#     tear_down_command_table= [ "while ! timeout 0.5 ping "+param_dict['CAM_IP']+" -c 1 ; do sleep 0.1; done",
+#                                "ssh root@"+param_dict['CAM_IP']+" ls /tmp/fuse_d/DCIM/100GOPRO",
+#                                "tcmd t dbg off",
+#                                "mkdir -p "+param_dict['TARGET_DIR'],
+#                                "ssh root@"+param_dict['CAM_IP']+" ls -l /tmp/fuse_d/DCIM/100GOPRO/",
+#                                "files=$(ssh root@"+param_dict['CAM_IP']+" ls /tmp/fuse_d/DCIM/100GOPRO/)",
+#                                "for file in $files ;  do wget  "+param_dict['CAM_IP']+":8042/DCIM/100GOPRO/$file -O "+param_dict['TARGET_DIR']+"/$file ;done",
+#                                "ssh root@" + param_dict['CAM_IP'] + " rm -rf /tmp/fuse_d/DCIM/100GOPRO/*"
+#                              ]
+#
+#     return tear_down_command_table
 

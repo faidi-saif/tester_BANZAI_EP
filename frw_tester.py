@@ -13,9 +13,9 @@ class frw_tester :
 
     def __init__(self):
 
-        self.serializer_ForArduino = serializer_ForArduino('arduino',9600)
-        self.serializer_ForRTOS = serializer_Reader('/dev/ttyUSB1',115200,"RTOS")
-        self.serializer_ForLinux = serializer_Reader('/dev/ttyUSB2', 115200,"LINUX")
+        self.serializer_ForArduino = serializer_ForArduino('/dev/ARDUINO',9600)
+        self.serializer_ForRTOS = serializer_Reader('/dev/RTOS',115200,"RTOS")
+        self.serializer_ForLinux = serializer_Reader('/dev/LINUX', 115200,"LINUX")
         self.tcmdAgent =tcmdGenerator()
         self.abspath = os.environ['HOME'] #abstract path = ~  , /var/lib/jenkins or /home/saif
         self.LINUX_log = ""
@@ -49,6 +49,9 @@ class frw_tester :
         self.goto_path("/BANZAI_EP/framework/test/test_cases")
         ret = os.system(arg_cmd)
         if ret != 0:
+            linux_rtos_logs = self.get_data()
+            print("linux ------------------------------> : \n"+linux_rtos_logs[0])
+            print("rtos  ------------------------------> : \n: \n" + linux_rtos_logs[1])
             raise Exception(" command : " + arg_cmd+" failed to execute")
 
         #print("command to be executed : ",arg_cmd)
@@ -189,9 +192,9 @@ class frw_tester :
 
 
 
-
-tester = frw_tester()
-tester.reset_camera()
+#
+# tester = frw_tester()
+# tester.reset_camera()
 # os.system("echo 't appc status disable' > /dev/ttyUSB1")
 # tester.Execute("echo 't appc status disable' > /dev/ttyUSB1")
 
