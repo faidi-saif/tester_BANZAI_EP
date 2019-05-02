@@ -16,19 +16,19 @@ mScenarioMaker.flash_Test(arg_frw_type="spherical")
 
 """
     @ /******************************************************************************************/
-    @ /* reset all the instance of serial ports since flashing the firmware kills this instances*/
+    @ /* reset all the instance of serial ports since flashing the firmware kills these instances*/
     @ /*                                                                                        */
     @ /******************************************************************************************/
 
 """
 #mScenarioMaker.m_frw_tester.Rinit_camera()
 #
-# mScenarioMaker.reset()
+# mScenarioMaker.m_frw_tester.reset_camera()
 # mScenarioMaker.m_frw_tester.turnOff_camera()
 # time.sleep(6)
 # mScenarioMaker.m_frw_tester.turnOn_camera()
 # time.sleep(4)
-# mScenarioMaker.reset()
+# mScenarioMaker.m_frw_tester.reset_camera()
 
 """
     @ /******************************************************************************************/
@@ -58,7 +58,7 @@ mScenarioMaker.flash_Test(arg_frw_type="spherical")
 # mScenarioMaker.Test_video(test_mode="5K_EAC_30_W_HEVC_IMX577", flare=1, arg_time=2)
 #
 # time.sleep(3)
-# mScenarioMaker.reset()
+# mScenarioMaker.m_frw_tester.reset_camera()
 # time.sleep(3)
 #
 # print("\nTest3 ==> test video -------------> *5K_EAC_24_W_HEVC_IMX577  *time =2  *flare =1 \n")
@@ -66,7 +66,7 @@ mScenarioMaker.flash_Test(arg_frw_type="spherical")
 #
 #
 # time.sleep(3)
-# mScenarioMaker.reset()
+# mScenarioMaker.m_frw_tester.reset_camera()
 # time.sleep(3)
 # """
 #     @ /******************************************************************************************/
@@ -81,7 +81,7 @@ mScenarioMaker.flash_Test(arg_frw_type="spherical")
 # mScenarioMaker.Test_image(test_mode="5K_EAC_30_W_HEVC_IMX577")
 #
 # time.sleep(3)
-# mScenarioMaker.reset()
+# mScenarioMaker.m_frw_tester.reset_camera()
 # time.sleep(3)
 #
 #
