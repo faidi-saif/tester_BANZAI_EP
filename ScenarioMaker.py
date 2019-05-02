@@ -14,8 +14,11 @@ class ScenarioMaker:
         self.home_path =self. m_frw_tester.abspath
         self.logs_path = os.environ["HOME"] + "/Logs"  # create a directory for personal logs
         self.checkdir(self.logs_path)  # chek if the Logs directory or not if not create it else nothing will be done
-        self.cleandir(self.logs_path)  # delete all directories +files in the params path
+        self.cleandir(self.logs_path)  # delete all directories +files in the logs path
 
+    def reset(self):
+        self.m_frw_tester.__del__()
+        self.m_frw_tester.__init__()
 
     def checkdir(self,arg_path):
         if os.path.isdir(arg_path):
@@ -35,6 +38,8 @@ class ScenarioMaker:
             except Exception as e:
                 print(e)
 
+    def __del__(self):
+        self.m_frw_tester.__del__()
 
     def copy_files(self,from_path, to_path):
         if os.path.exists(to_path):
@@ -44,8 +49,8 @@ class ScenarioMaker:
 
 
 
-    def flash_Test(self):
-        pass
+
+
 
     def reset(self):
         self.m_frw_tester.reset_camera()
@@ -62,7 +67,6 @@ class ScenarioMaker:
         self.m_frw_tester.stop_acquisition()
         linux_rtos_logs =self.m_frw_tester.get_data()
         self.m_logger.write(loc_path+"/linux_ResetTest_log.txt",linux_rtos_logs[0])
-        #m_logger.write("/tester_BANZAI/Logs/Linux_ResetTest_log.txt",linux_rtos_logs[0])
         self.m_logger.write(loc_path+"/rtos_ResetTest_log.txt",linux_rtos_logs[1])
 
 
@@ -107,7 +111,51 @@ class ScenarioMaker:
         time.sleep(0.5)
 
 
+    def flash_Test(self,arg_frw_type):
+
+        loc_path = self.logs_path + "/flashTest"+arg_frw_type
+        self.checkdir(loc_path) # this fuction check if the directory exists else create it
+        self.m_frw_tester.start_acquisition()
+        #self.m_frw_tester.flash_camera(arg_mode='make',arg_frw_type="spherical") #this reboots the platform
+        self.m_frw_tester.turnOff_camera()
+        self.m_frw_tester.flash_camera(arg_mode='arduino', arg_frw_type="spherical")
+        time.sleep(5)
+        self.m_frw_tester.stop_acquisition()
+        linux_rtos_logs =self.m_frw_tester.get_data()
+        self.m_logger.write(loc_path+"/linux_flashTest_log.txt",linux_rtos_logs[0])
+        self.m_logger.write(loc_path+"/rtos_flashTest_log.txt",linux_rtos_logs[1])
+        time.sleep(2)
+
+
 
 #
 # s= ScenarioMaker()
 # s.cleandir(s.logs_path+"/still_5K_EAC_30_W_HEVC_IMX577None")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

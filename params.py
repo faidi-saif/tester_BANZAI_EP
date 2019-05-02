@@ -1,4 +1,4 @@
-
+import os
 #
 #@ this script contains the encoded value
 #@sent on usart to control the camera
@@ -52,6 +52,18 @@ param_dict ={'RING_USE_HIGH_RES':"enable",
              'STUB':'disable',
              'VERBOSE':'off',
              'RUN_TIME':'5'}
+
+"""
+
+for flashing purposes , this variables aims to define path , mode and target 
+
+"""
+os.environ['GPDEV']='1'
+os.environ['TARGET_IP']='192.168.0.202'
+os.environ["HOST_IP"]="192.168.0.1"
+os.environ['HOST_HTTP_PATH']='/var/www/html'
+
+
 #
 # "echo 'Setting flare_fake_dsp_sleep to $FLARE_FAKE (sleep=$FLARE_FAKE_TIME)'",
 # "tcmd t frw stitch flare_fake_dsp_sleep $FLARE_FAKE $FLARE_FAKE_TIME",

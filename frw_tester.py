@@ -1,10 +1,11 @@
 import os
-##import sys
+import sys
 import shlex
 from subprocess import *
 from serializer_ForArduino import*
 from serializer_Reader import*
 from tcmdGenerator import *
+
 
 
 
@@ -22,6 +23,12 @@ class frw_tester :
         self.RTOS_log = ""
         # os.environ['CAM_IP']='192.168.0.202'
         # os.environ['TARGET_DIR']='~/Desktop/test_capt'
+
+    def __del__(self):
+        self.serializer_ForRTOS.__del__()
+        self.serializer_ForLinux.__del__()
+        self.serializer_ForArduino.__del__()
+
 
 
 
@@ -45,22 +52,6 @@ class frw_tester :
 
 
 
-    def Execute(self,arg_cmd):
-        self.goto_path("/BANZAI_EP/framework/test/test_cases")
-        ret = os.system(arg_cmd)
-        if ret != 0:
-            linux_rtos_logs = self.get_data()
-            print("linux ------------------------------> : \n"+linux_rtos_logs[0])
-            print("rtos  ------------------------------> : \n: \n" + linux_rtos_logs[1])
-            raise Exception(" command : " + arg_cmd+" failed to execute")
-
-        #print("command to be executed : ",arg_cmd)
-        # c_o_e= self.process_cmd(arg_cmd)
-        # if c_o_e[0] != 0:
-        #     eror_mess = "can't process",str(arg_cmd)," \n {}".format(c_o_e[2])
-        #     raise Exception(eror_mess)
-        # else:
-        #     print(c_o_e[1])
 
 
 
@@ -80,11 +71,6 @@ class frw_tester :
 
 
 
-    def __del__(self):
-        del self.serializer_ForRTOS
-        pass
-
-
 
 
 
@@ -102,37 +88,17 @@ class frw_tester :
     def check_file_exist(self,arg_path, arg_error_message):
         exists = os.path.isfile(arg_path)
         if exists:
-            print("path => ", arg_path, "exists Ok !")
+            print("path  :  ", arg_path, " EXISTS Ok !")
         else:
             raise Exception(arg_error_message)
 
 
-    #default test ===> ./spherical_test.sh -getresult -record -time 6 -fps 30
-    # def Test_case(self,still=None,time=6,keep_previous_dump=None,noflare=None,noreboot=None,fps=30):
-    #     shell_cmd = "./spherical_test.sh -getresult -record"
-    #     # in options make sure there is spaces at the beining and at the end
-    #     options = {" -keep_previous_dump": keep_previous_dump, " -noflare": noflare,
-    #                " -noreboot ": noreboot}
-    #
-    #     def create_options():
-    #         additional_options=""
-    #         for opt_name, opt_value in options.items():
-    #             if opt_value != None:
-    #                 additional_options = additional_options + opt_name
-    #                 # print(opt_name)
-    #         return additional_options
-    #     if still == None:
-    #     # video
-    #         shell_cmd =shell_cmd+" -time "+str(time)+" -fps "+str(fps)+create_options()
-    #     else:
-    #         # Image
-    #         shell_cmd = shell_cmd+" -still" + create_options()
-    #     self.Execute(shell_cmd)
+
     """
     @test_mode is a test flag must be : for example: 
     5K_EAC_15_W_HEVC_IMX577
     5K_EAC_30_W_HEVC_IMX577
-    5K_EAC_25_W_HEVC_${LRV}IMX577 
+
     
     @option must be  : CALIB , PANO fro still
     
@@ -155,11 +121,54 @@ class frw_tester :
         self.serializer_ForArduino.reset()
 
 
-    def flash_camera(self):
-        self.serializer_ForArduino.fw_flash()
+
+    # some tests to be executed have to be in  a specific path so we need to parametrize this
+    # and to do so we use the banzai_path arg in the function
+    def Execute(self,arg_cmd,banzai_path = 0):
+        if banzai_path == 1:
+            print(" ------------------------> "+os.getcwd())
+
+            #ret =call(["make","fw-flash"])
+            #pass
+        else :
+            self.goto_path("/BANZAI_EP/framework/test/test_cases")
+        ret = os.system(arg_cmd)
+        if ret != 0:
+            linux_rtos_logs = self.get_data()
+            print("linux ------------------------------> : \n"+linux_rtos_logs[0])
+            print("rtos  ------------------------------> : \n: \n" + linux_rtos_logs[1])
+            raise Exception(" command : " + arg_cmd+" failed to execute")
+
+        # print("command to be executed : ",arg_cmd)
+        # c_o_e= self.process_cmd(arg_cmd)
+        # if c_o_e[0] != 0:
+        #     eror_mess = "can't process",str(arg_cmd)," \n {}".format(c_o_e[2])
+        #     raise Exception(eror_mess)
+        # else:
+        #     print(c_o_e[1])
 
 
-    def power_camera(self):
+    def flash_camera(self,arg_mode,arg_frw_type):
+        if arg_mode =="arduino":
+            self.serializer_ForArduino.fw_flash()
+        elif arg_mode =="make":
+            if arg_frw_type == "spherical":
+                os.environ['VARIANT'] = 'spherical'
+                self.check_file_exist(self.abspath + "/BANZAI_EP/waf_build/spherical/build/eaglepeak/sd_fwupdate/DATA.bin",
+                    arg_error_message="binary for spherical doesn't exist")
+            #self.Execute("python waf configure",banzai_path=1)
+            # self.Execute("python waf build",banzai_path=1)
+            #self.Execute("make libs",banzai_path=1)
+            # self.Execute("make sdk",banzai_path=1)
+            #self.Execute("make fw",banzai_path=1)
+            self.Execute("make fw-flash", banzai_path=1)
+            #self.Execute("echo $GPDEV")
+
+        else:
+            raise Exception("Invalid flashing Mode : use 'arduino or 'make' to set the flashing mode ")
+
+
+    def turnOn_camera(self):
         self.serializer_ForArduino.PowerOn()
 
 
