@@ -55,7 +55,7 @@ param_dict ={'RING_USE_HIGH_RES':"enable",
 
 """
 
-for flashing purposes , this variables aims to define path , mode and target 
+for flashing purposes , these variables aims to define path , mode and target 
 
 """
 os.environ['GPDEV']='1'
