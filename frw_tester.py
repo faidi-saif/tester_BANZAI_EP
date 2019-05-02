@@ -110,15 +110,10 @@ class frw_tester :
             self.Execute(shell_cmd)
 
 
+    def runScenario(self,arg_commands):
+        for shell_cmd in arg_commands:
+            self.Execute(shell_cmd)
 
-
-
-
-
-
-
-    def reset_camera(self):
-        self.serializer_ForArduino.reset()
 
 
 
@@ -159,7 +154,7 @@ class frw_tester :
             #self.Execute("python waf configure",banzai_path=1)
             # self.Execute("python waf build",banzai_path=1)
             #self.Execute("make libs",banzai_path=1)
-            # self.Execute("make sdk",banzai_path=1)
+            #self.Execute("make sdk",banzai_path=1)
             #self.Execute("make fw",banzai_path=1)
             self.Execute("make fw-flash", banzai_path=1)
             #self.Execute("echo $GPDEV")
@@ -167,6 +162,10 @@ class frw_tester :
         else:
             raise Exception("Invalid flashing Mode : use 'arduino or 'make' to set the flashing mode ")
 
+
+
+    def reset_camera(self):
+        self.serializer_ForArduino.reset()
 
     def turnOn_camera(self):
         self.serializer_ForArduino.PowerOn()
