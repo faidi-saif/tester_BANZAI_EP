@@ -2,7 +2,7 @@ from frw_tester import *
 from logger import *
 import os
 import shutil
-
+from supervisor import supervisor
 
 
 
@@ -10,11 +10,13 @@ class ScenarioMaker:
     def __init__(self):
         self.m_frw_tester = frw_tester()
         self.m_logger = logger()
+        self.supervisor = supervisor()
         self.m_frw_tester.goto_path("/BANZAI_EP")  # redirect you to ~/BANZAI_EP
         self.home_path =self. m_frw_tester.abspath
         self.logs_path = os.environ["HOME"] + "/Logs"  # create a directory for personal logs
         self.checkdir(self.logs_path)  # chek if the Logs directory or not if not create it else nothing will be done
         self.cleandir(self.logs_path)  # delete all directories +files in the logs path
+
 
     def reset(self):
         self.m_frw_tester.__del__()
@@ -48,12 +50,15 @@ class ScenarioMaker:
         shutil.copytree(from_path, to_path)
 
 
+    def cleanup(self):
+        self.m_frw_tester.flash_camera(arg_mode='arduino', arg_frw_type="spherical")
+        self.m_frw_tester.turnOn_camera()
+        self.cleandir(self.home_path + "/Desktop/test_capt")
+        time.sleep(1)
+        clean_cmd = self.m_frw_tester.tcmdAgent.getCmd(clean=1) # delete all files in DCIM/100GOPRO
+        self.m_frw_tester.Execute(clean_cmd)
+        time.sleep(0.5)
 
-
-
-
-    def reset(self):
-        self.m_frw_tester.reset_camera()
 
 
 
@@ -102,13 +107,7 @@ class ScenarioMaker:
         self.cleandir(self.home_path + "/Desktop/test_capt") #for each test delete the  generated files
         time.sleep(1.5)
 
-    def cleanup(self):
-        self.m_frw_tester.Rinit_camera()
-        self.cleandir(self.home_path + "/Desktop/test_capt")
-        time.sleep(1)
-        clean_cmd = self.m_frw_tester.tcmdAgent.getCmd(clean=1) # delete all files in DCIM/100GOPRO
-        self.m_frw_tester.Execute(clean_cmd)
-        time.sleep(0.5)
+
 
 
     def flash_Test(self,arg_frw_type):
@@ -116,14 +115,18 @@ class ScenarioMaker:
         loc_path = self.logs_path + "/flashTest"+arg_frw_type
         self.checkdir(loc_path) # this fuction check if the directory exists else create it
         self.m_frw_tester.start_acquisition()
-        #self.m_frw_tester.flash_camera(arg_mode='make',arg_frw_type="spherical") #this reboots the platform
-        self.m_frw_tester.turnOff_camera()
-        self.m_frw_tester.flash_camera(arg_mode='arduino', arg_frw_type="spherical")
-        time.sleep(5)
+        #self.m_frw_tester.flash_camera(arg_mode='make',arg_frw_type=arg_frw_type) #this reboots the platform
+        #self.m_frw_tester.flash_camera(arg_mode='arduino', arg_frw_type=arg_frw_type)
+        time.sleep(10)
+        check_boot_cmd = self.m_frw_tester.tcmdAgent.getCmd(rtos_version_test=1) # this command is used to check if the rtos is flashed with good params or not
+        self.m_frw_tester.runScenario(check_boot_cmd)
+        time.sleep(2)
         self.m_frw_tester.stop_acquisition()
         linux_rtos_logs =self.m_frw_tester.get_data()
+        rtos_log_path = loc_path+"/rtos_flashTest_log.txt"
         self.m_logger.write(loc_path+"/linux_flashTest_log.txt",linux_rtos_logs[0])
-        self.m_logger.write(loc_path+"/rtos_flashTest_log.txt",linux_rtos_logs[1])
+        self.m_logger.write(rtos_log_path,linux_rtos_logs[1])
+        self.supervisor.isfirmwareBooted(rtos_log_path)
         time.sleep(2)
 
 
