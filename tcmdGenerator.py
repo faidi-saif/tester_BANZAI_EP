@@ -62,7 +62,7 @@ class tcmdGenerator:
             if "tcmd" in command :
                 command = command.replace("tcmd ", "")
                 command = "echo"+" '"+command+"'"
-                command = command +" > /dev/ttyUSB1"
+                command = command +" > /dev/RTOS"
             loc_commands.append(command)
         return loc_commands
 
@@ -75,13 +75,16 @@ class tcmdGenerator:
     def tear_down(self):
         return get_tear_down_command_table()
 
-    def getCmd(self,clean = None,connect=None,display =None):
+    # for clean code these commands should be in params.py and for each arg get its specefic command table"
+    def getCmd(self,clean = None,connect=None,display =None,rtos_version_test = None):
         if clean ==1:
             return "ssh root@" + param_dict['CAM_IP'] + " rm -rf /tmp/fuse_d/DCIM/100GOPRO/*"
         elif connect ==1:
             return "while ! timeout 0.5 ping " + param_dict['CAM_IP'] + " -c 1 ; do sleep 0.1; done"
         elif display ==1:
             return "ssh root@"+param_dict['CAM_IP']+" ls -l /tmp/fuse_d/DCIM/100GOPRO/"
+        elif rtos_version_test == 1:
+            return ["echo 't dbg on' > /dev/RTOS","echo 't version' > /dev/RTOS","echo 't dbg off' > /dev/RTOS"]
 
 
 
