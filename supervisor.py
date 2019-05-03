@@ -1,7 +1,5 @@
 from frw_parser import frw_parser
 
-
-
 """
 
 Maybe we add  timing functionalities to this class to limit tests with timeouts 
@@ -11,9 +9,6 @@ class supervisor:
 
     def __init__(self):
         self.mfrw_parser = frw_parser()
-
-
-
 
 
     def isfirmwareBooted(self,arg_log_path):
@@ -26,5 +21,3 @@ class supervisor:
 
 
 
-# supervisor = supervisor()
-# supervisor.isfirmwareBooted('/home/saif/Logs/flashTestspherical/rtos_flashTest_log.txt')

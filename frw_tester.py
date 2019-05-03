@@ -21,8 +21,7 @@ class frw_tester :
         self.abspath = os.environ['HOME'] #abstract path = ~  , /var/lib/jenkins or /home/saif
         self.LINUX_log = ""
         self.RTOS_log = ""
-        # os.environ['CAM_IP']='192.168.0.202'
-        # os.environ['TARGET_DIR']='~/Desktop/test_capt'
+
 
     def __del__(self):
         self.serializer_ForRTOS.__del__()
@@ -40,20 +39,12 @@ class frw_tester :
         @ /******************************************************************************************/
 
     """
-
-
-
     def process_cmd(self,cmd): #takes a shell command and execute it
         args = shlex.split(cmd)
         proc = Popen(args, stdout=PIPE, stderr=PIPE)
         out, err = proc.communicate()
         exitcode = proc.returncode
         return exitcode, out, err
-
-
-
-
-
 
 
     def goto_path(self,arg_path):
@@ -67,11 +58,6 @@ class frw_tester :
         except:
             print("Unexcepted error , please make sure",arg_path ,"directory is in your", '"', self.abspath,
                   '"', "directory")
-
-
-
-
-
 
 
 
@@ -98,8 +84,6 @@ class frw_tester :
     @test_mode is a test flag must be : for example: 
     5K_EAC_15_W_HEVC_IMX577
     5K_EAC_30_W_HEVC_IMX577
-
-    
     @option must be  : CALIB , PANO fro still
     
     """

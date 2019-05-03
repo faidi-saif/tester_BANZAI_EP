@@ -40,14 +40,15 @@ class serializer_ForArduino(serializer):
         time.sleep(3)
 
     def reset(self):
+        time.sleep(3)
         self.ser.flushInput()
         self.ser.flushOutput()
         self.ser.write(PRESS_EP_RST)
-        time.sleep(0)
+        time.sleep(0.5)
         self.ser.flushInput()
         self.ser.flushOutput()
         self.ser.write(RELEASE_EP_RST)
-        time.sleep(0)
+        time.sleep(6)
 
     def fw_flash(self):
         self.ser.flushInput()

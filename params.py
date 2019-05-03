@@ -24,23 +24,6 @@ RELEASE_POW = str.encode("R3")
 VOLT_POWER = str.encode("V3")
 
 
-#
-#@ Test setup
-#@
-#
-
-
-
-# RING_USE_HIGH_RES ="enable"
-# FLARE_FAKE_TIME ='0'
-# FLARE_ID_FRONT_CORR='50'
-# FLARE_FAKE='disable'
-# CAM_IP="192.168.0.202"
-# TARGET_DIR='~/Desktop/test_capt'
-# LRV=""
-# STUB='disable'
-# VERBOSE='off'
-# RUN_TIME='5'
 
 param_dict ={'RING_USE_HIGH_RES':"enable",
              'FLARE_FAKE_TIME':'0',
@@ -148,7 +131,7 @@ def get_tear_down_command_table():
                                "ssh root@" + param_dict['CAM_IP'] + " rm -rf /tmp/fuse_d/DCIM/100GOPRO/*"
                              ]
     return tear_down_command_table
-
+# ----------------------------------------- test the tear down outside the tear_down.sh ---------------------------------
 # def get_tear_down_command_table():
 #     tear_down_command_table= [ "while ! timeout 0.5 ping "+param_dict['CAM_IP']+" -c 1 ; do sleep 0.1; done",
 #                                "ssh root@"+param_dict['CAM_IP']+" ls /tmp/fuse_d/DCIM/100GOPRO",
